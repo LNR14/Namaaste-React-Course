@@ -2,6 +2,7 @@ import { useState } from "react";
 import heroImg from "./assets/hero.png";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
+import exampleData from "./example.json";
 import "./App.css";
 
 const styleCard = {
@@ -30,41 +31,50 @@ const Header = () => {
   );
 };
 
+const resList = {};
 const Body = () => {
+  const resList =
+    exampleData.data.cards[4].card.card.gridElements.infoWithStyle.restaurants;
   return (
     <div className="body">
       <div className="search">Search</div>
       <div className="res-container">
-        <RestuarantCard
-          resName="Meghana Foods"
-          cuisine="Biryani, North Indian, Asian"
-          rating="4.4"
-          waitTime="30 mins"
-        />
-        <RestuarantCard
-          resName="KFC"
-          cuisine="American, Chicken"
-          rating="4.0"
-          waitTime="25 mins"
-        />
+        {resList &&
+          resList.map((restaurant) => (
+            <RestuarantCard
+              key={restaurant.info.id}
+              resName={restaurant.info.name}
+              cuisines={restaurant.info.cuisines}
+              rating={restaurant.info.avgRating}
+              waitTime={restaurant.info.sla.deliveryTime}
+              costForTwo={restaurant.info.costForTwo}
+              cloudinaryImageId={restaurant.info.cloudinaryImageId}
+            />
+          ))}
       </div>
     </div>
   );
 };
 
 const RestuarantCard = (props) => {
-  const { resName, cuisine, rating, waitTime } = props;
+  console.log(props);
+  const { resName, cuisines, rating, waitTime, cloudinaryImageId, costForTwo } =
+    props;
   return (
     <div className="res-card" style={styleCard}>
       <h3> {resName}</h3>
       <img
         className="res-logo"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4e5_dosmTxs04PtVQiTb9iJUvPmLb1pJQ2N49kYonTsImfYsIx7nq3DA&s=10"
-        alt="biryani "
+        src={
+          "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/" +
+          cloudinaryImageId
+        }
+        alt="biryani"
       />
-      <h4> {cuisine} </h4>
+      <h4> {cuisines.join(", ")} </h4>
       <h4> {rating} </h4>
-      <h4> {waitTime} </h4>
+      <h4> {costForTwo} </h4>
+      <h4> {waitTime} mins</h4>
     </div>
   );
 };
